@@ -1,0 +1,163 @@
+[build-system]
+requires = ["setuptools>=75.5.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clawed"
+version = "0.0.0"
+description = "Clawed assists Claude"
+readme = "README.md"
+requires-python = ">=3.13"
+license = {text = "MIT License"}
+authors = [
+    {name = "jalanb", email = "github@al-got-rhythm.net"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Development Status :: 1 - Planning",
+    "Natural Language :: English",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+# Core dependencies
+dependencies = [
+]
+
+[project.optional-dependencies]
+# Extras for app
+app = [
+    "clawed",
+]
+
+# Linting tools - standalone, no project dependencies needed
+lint = [
+    "black",
+    "blackdoc",
+    "flake8",
+    "flake8-bugbear",
+    "flake8-comprehensions",
+    "flake8-eradicate",
+    "flake8-isort",
+    "Flake8-pyproject",
+    "isort",
+    "mypy",
+]
+
+# Testing needs project + test tools
+test = [
+    "clawed",
+    "callee",
+    "codecov",
+    "coverage",
+    "docker",
+    "httpx",
+    "pytest",
+    "pytest-cov",
+    "pytest-docker",
+    "tox",
+]
+
+# DevOps needs testing capabilities plus deployment tools
+devops = [
+    "clawed[test]",
+    "clawed[lint]",
+    "bump2version",
+    "build",
+]
+
+# Full development environment: DevOps + Dev Tools
+dev = [
+    "clawed[devops]",
+    "httpie",
+    "ipython",
+    "pudb",
+    "pytest-pudb",
+    "pytest-sugar",
+    "sh",
+]
+
+[project.urls]
+Homepage = "https://github.com/jalanb/clawed"
+
+[tool.setuptools.package-data]
+# These patterns include doctests, which serve as both documentation and test cases,
+# potentially useful for end users of clawed.
+clawed = ["**/*.test", "**/*.md"]
+
+[tool.setuptools.packages.find]
+include = ["clawed*"]
+exclude = ["test_*.py"]
+
+[tool.flake8]
+# https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#flake8
+max-line-length = 88
+extend-ignore = ["E701", "E203", ]
+
+[tool.mypy]
+ignore_missing_imports = true
+install_types = true
+non_interactive = true
+check_untyped_defs = true
+strict_optional = true
+
+[tool.isort]
+profile = "black"
+force_single_line = "True"
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["clawed"]
+omit = ["*/test/*"]
+concurrency = ["thread", "multiprocessing"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_also = [
+    "if __name__ == \"__main__\":",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+addopts = "--doctest-modules --doctest-glob=*.test --doctest-glob=*.md" 
+doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE"]
+
+[tool.tox]
+envlist = ["lints", "tests"]
+
+[tool.tox.env.lints]
+deps = [".[lint]"]
+commands = [
+    ["black", "-S", "--check", "clawed"],
+    ["blackdoc", "-S", "--include", "[.](md|py|test|tests)", "--check", "clawed"],
+    ["flake8", "clawed"],
+    ["mypy", "clawed"],
+]
+
+[tool.tox.env.tests]
+deps = [".[test]"]
+commands = [
+    ["py.test", "--cov=clawed", "clawed", "tests" ]
+]
+
+[tool.tox.env.devs]
+deps = [".[develop]"]
+commands = [
+    ["py.test", "--exitfirst", "-m'not slow'", "--random-order","clawed", "tests" ]
+]
+
+[tool.tox.env.pudb]
+deps = [".[develop]"]
+commands = [
+    ["py.test", "--pudb", "clawed", "tests" ]
+]
+
+[project.scripts]
+clawed = "clawed.__main__:main"
