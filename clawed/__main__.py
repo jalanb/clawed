@@ -1,10 +1,11 @@
-"""Main script to run ` clawed server"""
+"""Main script to run clawed server"""
 import os
 import sys
 
 
-def main -> int:
+def main() -> int:
     return os.EX_OK
+
 
 if __name__ == '__main__':
     sys.exit(main())
