@@ -37,12 +37,12 @@ For example:
 
 ## Contents
 
-A session file should have all these headings
+A session file should have some of these headings
 
 If it has any more headings, they should appear after these
 
 - Project Understanding
-- Architecture
+- Investigations
 - Implementation Details
 - Next Steps
 - Questions Raised

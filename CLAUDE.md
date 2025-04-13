@@ -40,7 +40,7 @@ For example, if we have two sub projects ("fred" and "mary"), then we'd have
 
 N.B. If `fred/fred` exists, then that holds the sources that are needed _here_ to handle a project called "fred". It is _not_ fred's own source code 
 
-We'll always have source code for this project, but maybe not in sub projects, so is possible too:
+We'll always have source code for this project, but maybe not in sub projects, so this is possible too:
   - sessions
   - clawed
   - howto
